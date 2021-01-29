@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/scandi_bot?currentSchema\=public
+    username: admin
+    password: q1w2e3r4!@
+    continue-on-error: true
+    hikari:
+      maximum-pool-size: 50
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate.dialect: org.hibernate.dialect.H2Dialect
+      hibernate.temp.use_jdbc_metadata_defaults: false
+
+telegram:
+  bot: ${BOT_NAME}
+  token: ${BOT_TOKEN}
+
+server:
+  port: 8080
