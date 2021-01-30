@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import ru.xpendence.housingtelegrambot.model.Query;
+import ru.xpendence.housingtelegrambot.model.api.Query;
 import ru.xpendence.housingtelegrambot.util.MessageBuilder;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class StartCommandExecutor implements CommandExecutor {
     public SendMessage execute(Query query) {
         // TODO: 30.01.2021 два текста - для указавшего информацию и не указавшего. Две кнопки или одна.
         var message = MessageBuilder.build(
-                query.getUser().getId().toString(),
+                query.getChatUser().getTelegramId().toString(),
                 START_TEXT_MESSAGE,
                 true
         );

@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.xpendence.housingtelegrambot.model.Query;
+import ru.xpendence.housingtelegrambot.mapper.ChatUserMapper;
+import ru.xpendence.housingtelegrambot.model.api.Query;
+import ru.xpendence.housingtelegrambot.service.domain.ChatUserService;
 import ru.xpendence.housingtelegrambot.service.handler.CommandHandler;
 
 import java.util.Objects;
@@ -20,39 +22,20 @@ import java.util.Objects;
 public class HousingBotServiceImpl implements HousingBotService {
 
     private final CommandHandler commandHandler;
+    private final ChatUserMapper chatUserMapper;
+    private final ChatUserService chatUserService;
 
     @Override
     public SendMessage onUpdateReceived(Update update) {
         if (isCommand(update)) {
-            return commandHandler.handle(Query.ofCommand(update));
+            var chatUser = chatUserService.getOrSave(chatUserMapper.map(update.getMessage().getFrom()));
+            return commandHandler.handle(Query.ofCommand(update, chatUser));
         }
         if (isCallbackQuery(update)) {
-            return commandHandler.handle(Query.ofCallbackQuery(update));
-        }
-
-        if (fromPrivateChat(update)) {
-            return handleMessageFromPrivateChat(update);
-        }
-        if (fromGroupChat(update)) {
-            return handleMessageFromGroupChat(update);
+            var chatUser = chatUserService.getOrSave(chatUserMapper.map(update.getCallbackQuery().getFrom()));
+            return commandHandler.handle(Query.ofCallbackQuery(update, chatUser));
         }
         return null;
-    }
-
-    private SendMessage handleMessageFromGroupChat(Update update) {
-        return null;
-    }
-
-    private boolean fromGroupChat(Update update) {
-        return false;
-    }
-
-    private SendMessage handleMessageFromPrivateChat(Update update) {
-        return null;
-    }
-
-    private boolean fromPrivateChat(Update update) {
-        return false;
     }
 
     private boolean isCommand(Update update) {

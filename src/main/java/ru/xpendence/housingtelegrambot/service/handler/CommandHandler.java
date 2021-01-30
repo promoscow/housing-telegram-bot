@@ -3,7 +3,7 @@ package ru.xpendence.housingtelegrambot.service.handler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import ru.xpendence.housingtelegrambot.model.Query;
+import ru.xpendence.housingtelegrambot.model.api.Query;
 import ru.xpendence.housingtelegrambot.service.handler.executor.CommandExecutor;
 
 import java.util.Map;
