@@ -27,7 +27,7 @@ public class HousingBotServiceImpl implements HousingBotService {
             return commandHandler.handle(Query.ofCommand(update));
         }
         if (isCallbackQuery(update)) {
-
+            return commandHandler.handle(Query.ofCallbackQuery(update));
         }
 
         if (fromPrivateChat(update)) {

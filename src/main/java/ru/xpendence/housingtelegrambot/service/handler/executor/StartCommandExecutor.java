@@ -31,7 +31,7 @@ public class StartCommandExecutor implements CommandExecutor {
     public SendMessage execute(Query query) {
         // TODO: 30.01.2021 два текста - для указавшего информацию и не указавшего. Две кнопки или одна.
         var message = MessageBuilder.build(
-                query.getChatId().toString(),
+                query.getUser().getId().toString(),
                 START_TEXT_MESSAGE,
                 true
         );
