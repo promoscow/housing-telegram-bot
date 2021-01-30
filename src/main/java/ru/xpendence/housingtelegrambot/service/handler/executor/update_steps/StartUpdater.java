@@ -1,12 +1,10 @@
-package ru.xpendence.housingtelegrambot.service.handler;
+package ru.xpendence.housingtelegrambot.service.handler.executor.update_steps;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.xpendence.housingtelegrambot.model.api.Query;
-import ru.xpendence.housingtelegrambot.service.handler.executor.CommandExecutor;
-
-import java.util.Map;
+import ru.xpendence.housingtelegrambot.service.domain.FlatService;
 
 /**
  * Описание класса: пару слов что это такое и для чего нужен.
@@ -14,14 +12,15 @@ import java.util.Map;
  * @author Вячеслав Чернышов
  * @since 30.01.2021
  */
-@Component
+@Component("START")
 @RequiredArgsConstructor
-public class CommandHandler implements Handler {
+public class StartUpdater implements Updater {
 
-    private final Map<String, CommandExecutor> executors;
+    private final FlatService flatService;
 
     @Override
-    public SendMessage handle(Query query) {
-        return executors.get(query.getCommand()).execute(query);
+    public SendMessage update(Query query) {
+        var flat = flatService.getOrSave(query.getChatUser());
+        return null;
     }
 }

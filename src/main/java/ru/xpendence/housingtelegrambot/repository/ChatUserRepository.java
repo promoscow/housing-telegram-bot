@@ -1,7 +1,6 @@
 package ru.xpendence.housingtelegrambot.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import ru.xpendence.housingtelegrambot.model.domain.ChatUser;
 
 import java.util.Optional;
@@ -12,7 +11,6 @@ import java.util.Optional;
  * @author Вячеслав Чернышов
  * @since 30.01.2021
  */
-@Repository
 public interface ChatUserRepository extends JpaRepository<ChatUser, String> {
 
     Optional<ChatUser> getByTelegramId(Long telegramId);

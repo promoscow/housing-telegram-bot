@@ -1,14 +1,12 @@
 package ru.xpendence.housingtelegrambot.model.domain;
 
+import com.google.common.collect.Lists;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -37,6 +35,12 @@ public class Flat extends AbstractEntity {
     @Column(name = "flat")
     private Short flat;
 
-    @ManyToMany(mappedBy = "flats")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "flat")
     private List<ChatUser> chatUsers;
+
+    public static Flat newOf(ChatUser chatUser) {
+        var flat = new Flat();
+        flat.chatUsers = Lists.newArrayList(chatUser);
+        return flat;
+    }
 }

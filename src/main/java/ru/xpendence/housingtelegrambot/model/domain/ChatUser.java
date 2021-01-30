@@ -6,7 +6,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * Описание класса: пару слов что это такое и для чего нужен.
@@ -38,11 +37,7 @@ public class ChatUser extends AbstractEntity {
     @Column(name = "last_name")
     private String lastName;
 
-    @ManyToMany
-    @JoinTable(
-            name = "chat_users_flats",
-            joinColumns = @JoinColumn(name = "chat_user_id"),
-            inverseJoinColumns = @JoinColumn(name = "flat_id")
-    )
-    private List<Flat> flats;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "flat_id")
+    private Flat flat;
 }

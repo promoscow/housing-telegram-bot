@@ -3,7 +3,11 @@ package ru.xpendence.housingtelegrambot.model.api;
 import lombok.Data;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.xpendence.housingtelegrambot.model.api.enums.UpdateStep;
 import ru.xpendence.housingtelegrambot.model.domain.ChatUser;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Описание класса: пару слов что это такое и для чего нужен.
@@ -18,6 +22,7 @@ public class Query {
     private ChatUser chatUser;
     private String text;
     private boolean privateChatWithQueryAuthor;
+    private UpdateStep updateStep;
 
     public static Query ofCommand(Update update, ChatUser chatUser) {
         var query = new Query();
@@ -36,6 +41,25 @@ public class Query {
         query.chatUser = chatUser;
         query.text = update.getCallbackQuery().getData();
         return query;
+    }
+
+    public String getCommand() {
+        return Arrays.stream(this.text.split(" "))
+                .filter(e -> e.matches("^/\\D+$"))
+                .collect(Collectors.joining());
+    }
+
+    public UpdateStep defineUpdateStep() {
+        assert this.text != null;
+        var textArguments = this.text.split(" ");
+        if (textArguments.length > 1) {
+            var updateStep = textArguments[1];
+            return Arrays.stream(UpdateStep.values())
+                    .filter(v -> v.name().equals(updateStep))
+                    .findFirst()
+                    .orElse(UpdateStep.START);
+        }
+        return UpdateStep.START;
     }
 
     private boolean isPrivateChatWithQueryAuthor(Message message) {
