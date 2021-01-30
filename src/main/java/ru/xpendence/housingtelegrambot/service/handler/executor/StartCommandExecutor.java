@@ -3,10 +3,9 @@ package ru.xpendence.housingtelegrambot.service.handler.executor;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import ru.xpendence.housingtelegrambot.model.Query;
 import ru.xpendence.housingtelegrambot.util.MessageBuilder;
 
 import java.util.ArrayList;
@@ -29,10 +28,10 @@ public class StartCommandExecutor implements CommandExecutor {
         """;
 
     @Override
-    public SendMessage execute(Update update) {
+    public SendMessage execute(Query query) {
         // TODO: 30.01.2021 два текста - для указавшего информацию и не указавшего. Две кнопки или одна.
         var message = MessageBuilder.build(
-                update.getMessage().getChatId().toString(),
+                query.getChatId().toString(),
                 START_TEXT_MESSAGE,
                 true
         );

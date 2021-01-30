@@ -1,7 +1,7 @@
 package ru.xpendence.housingtelegrambot.service.handler;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.xpendence.housingtelegrambot.model.Query;
 
 /**
  * Описание класса: пару слов что это такое и для чего нужен.
@@ -11,5 +11,5 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  */
 public interface Handler {
 
-    SendMessage handle(Update update);
+    SendMessage handle(Query query);
 }
