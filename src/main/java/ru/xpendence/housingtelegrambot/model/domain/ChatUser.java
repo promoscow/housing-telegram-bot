@@ -1,7 +1,8 @@
 package ru.xpendence.housingtelegrambot.model.domain;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -14,7 +15,8 @@ import javax.persistence.*;
  * @since 30.01.2021
  */
 @EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 @SQLDelete(sql = "update chat_users set active = 'DISABLED' where id = ?")
 @Entity
 @Table(

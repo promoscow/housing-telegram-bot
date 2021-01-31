@@ -1,8 +1,9 @@
 package ru.xpendence.housingtelegrambot.model.domain;
 
 import com.google.common.collect.Lists;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -16,7 +17,8 @@ import java.util.List;
  * @since 30.01.2021
  */
 @EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 @SQLDelete(sql = "update flats set active = 'DISABLED' where id = ?")
 @Entity
 @Table(name = "flats")

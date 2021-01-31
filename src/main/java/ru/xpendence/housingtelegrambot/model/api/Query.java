@@ -65,4 +65,14 @@ public class Query {
     private boolean isPrivateChatWithQueryAuthor(Message message) {
         return message.getChat().isUserChat() && message.getChat().getUserName().equals(message.getFrom().getUserName());
     }
+
+    public Short getHousing() {
+        assert this.text != null;
+        var textArguments = this.text.split(" ");
+        var updateStep = this.defineUpdateStep();
+        if (UpdateStep.HOUSING.equals(updateStep) && textArguments.length > 2) {
+            return Short.parseShort(textArguments[2]);
+        }
+        throw new IllegalArgumentException("Не найден аргумент HOUSING, текст запроса: " + this.text);
+    }
 }

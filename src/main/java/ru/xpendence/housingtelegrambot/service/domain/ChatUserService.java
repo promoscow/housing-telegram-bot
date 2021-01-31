@@ -23,6 +23,10 @@ public class ChatUserService {
         return chatUserRepository.save(chatUser);
     }
 
+    public ChatUser update(ChatUser chatUser) {
+        return chatUserRepository.save(chatUser);
+    }
+
     // TODO: 30.01.2021 caching
     public Optional<ChatUser> getByTelegramId(Long telegramId) {
         return chatUserRepository.getByTelegramId(telegramId);

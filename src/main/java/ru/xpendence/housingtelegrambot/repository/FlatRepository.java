@@ -2,6 +2,7 @@ package ru.xpendence.housingtelegrambot.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.xpendence.housingtelegrambot.model.domain.Flat;
 
 import java.util.Optional;
@@ -15,8 +16,8 @@ import java.util.Optional;
 public interface FlatRepository extends JpaRepository<Flat, String> {
 
     @Query(
-            value = "select * from flats as f inner join chat_users as c on c.flat_id = f.id where f.id = :chatUserId",
+            value = "select * from flats where id = (select flat_id from chat_users where id = :chatUserId)",
             nativeQuery = true
     )
-    Optional<Flat> getByChatUserId(String chatUserId);
+    Optional<Flat> getForUser(@Param("chatUserId") String chatUserId);
 }
