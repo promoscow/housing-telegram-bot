@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import ru.xpendence.housingtelegrambot.model.api.enums.UpdateStep;
 
 import javax.persistence.*;
 
@@ -42,4 +43,11 @@ public class ChatUser extends AbstractEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "flat_id")
     private Flat flat;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "update_step")
+    private UpdateStep updateStep;
+
+    @Column(name = "registered")
+    private Boolean registered;
 }

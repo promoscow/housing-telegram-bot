@@ -19,50 +19,67 @@ import java.util.List;
  * Описание класса: пару слов что это такое и для чего нужен.
  *
  * @author Вячеслав Чернышов
- * @since 30.01.2021
+ * @since 31.01.2021
  */
-@Component("START")
+@Component("FLAT")
 @RequiredArgsConstructor
-public class StartUpdater implements Updater {
+public class FlatUpdater implements Updater {
+
+    private final static String CONGRATS_TEXT = """
+            Поздравляю! Давай проверим информацию. Я записал следующие:
+            
+            Корпус: %d
+            Секция: %d
+            Этаж: %d
+            Квартира: %d.
+            
+            Всё верно?
+            """;
 
     private final FlatService flatService;
     private final ChatUserService chatUserService;
 
-    private static final String CHOOSE_HOUSING_TEXT = "Окей! Укажи корпус, в котором ты живёшь. Просто нажми нужную кнопку ниже.";
-
     @Override
     public SendMessage update(Query query) {
-        flatService.getOrSave(query.getChatUser());
-        query.getChatUser().setUpdateStep(UpdateStep.HOUSING);
+        var flat = flatService.getOrSave(query.getChatUser());
+        flat.setFlat(Short.parseShort(query.getText()));
+        flat = flatService.update(flat);
+        query.getChatUser().setUpdateStep(UpdateStep.CONFIRMATION);
         chatUserService.update(query.getChatUser());
 
         var message = MessageBuilder.build(
-                query.getChatUser().getTelegramId().toString(), CHOOSE_HOUSING_TEXT, true
+                query.getChatUser().getTelegramId().toString(),
+                String.format(CONGRATS_TEXT, flat.getHousing(), flat.getSection(), flat.getFloor(), flat.getFlat()),
+                true
         );
+
         message.setReplyMarkup(composeButtons());
         return message;
     }
 
     private InlineKeyboardMarkup composeButtons() {
         var markup = new InlineKeyboardMarkup();
-        var housingOneButton = createHousingButton("1");
-        var housingTwoButton = createHousingButton("2");
-        var housingTreeButton = createHousingButton("3");
-        var housingFourButton = createHousingButton("4");
+        var yesButton = createYesButton();
+        var noButton = createNoButton();
 
-        var buttons = Lists.newArrayList(
-                housingOneButton, housingTwoButton, housingTreeButton, housingFourButton
-        );
+        var buttons = Lists.newArrayList(yesButton, noButton);
         var keyboard = new ArrayList<List<InlineKeyboardButton>>();
         keyboard.add(buttons);
         markup.setKeyboard(keyboard);
         return markup;
     }
 
-    private InlineKeyboardButton createHousingButton(String housing) {
+    private InlineKeyboardButton createYesButton() {
         var button = new InlineKeyboardButton();
-        button.setText(housing);
-        button.setCallbackData(housing);
+        button.setText("Да, всё верно");
+        button.setCallbackData("yes");
+        return button;
+    }
+
+    private InlineKeyboardButton createNoButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("Нет, я ошибся");
+        button.setCallbackData("no");
         return button;
     }
 }

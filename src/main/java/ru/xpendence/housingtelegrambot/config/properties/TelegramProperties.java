@@ -3,6 +3,9 @@ package ru.xpendence.housingtelegrambot.config.properties;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * Описание класса: пару слов что это такое и для чего нужен.
@@ -13,8 +16,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("telegram")
 @Getter
 @Setter
+@Validated
 public class TelegramProperties {
 
+    @NotNull
     private String bot;
+
+    @NotNull
     private String token;
 }

@@ -13,11 +13,11 @@ import ru.xpendence.housingtelegrambot.util.MessageBuilder;
  * Описание класса: пару слов что это такое и для чего нужен.
  *
  * @author Вячеслав Чернышов
- * @since 30.01.2021
+ * @since 31.01.2021
  */
-@Component("HOUSING")
+@Component("SECTION")
 @RequiredArgsConstructor
-public class HousingUpdater implements Updater {
+public class SectionUpdater implements Updater {
 
     private final FlatService flatService;
     private final ChatUserService chatUserService;
@@ -25,14 +25,14 @@ public class HousingUpdater implements Updater {
     @Override
     public SendMessage update(Query query) {
         var flat = flatService.getOrSave(query.getChatUser());
-        flat.setHousing(Short.parseShort(query.getText()));
+        flat.setSection(Short.parseShort(query.getText()));
         flatService.update(flat);
-        query.getChatUser().setUpdateStep(UpdateStep.SECTION);
+        query.getChatUser().setUpdateStep(UpdateStep.FLOOR);
         chatUserService.update(query.getChatUser());
 
         return MessageBuilder.build(
                 query.getChatUser().getTelegramId().toString(),
-                "Отлично, корпус записан! Теперь давай введём секцию. Просто напиши мне сообщение с номером.",
+                "Мы записали секцию, поздравляю! Идём дальше: введи этаж.",
                 false
         );
     }

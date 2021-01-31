@@ -8,6 +8,7 @@ import ru.xpendence.housingtelegrambot.mapper.ChatUserMapper;
 import ru.xpendence.housingtelegrambot.model.api.Query;
 import ru.xpendence.housingtelegrambot.service.domain.ChatUserService;
 import ru.xpendence.housingtelegrambot.service.handler.CommandHandler;
+import ru.xpendence.housingtelegrambot.service.handler.MessageHandler;
 
 import java.util.Objects;
 
@@ -22,6 +23,7 @@ import java.util.Objects;
 public class HousingBotServiceImpl implements HousingBotService {
 
     private final CommandHandler commandHandler;
+    private final MessageHandler messageHandler;
     private final ChatUserMapper chatUserMapper;
     private final ChatUserService chatUserService;
 
@@ -29,13 +31,27 @@ public class HousingBotServiceImpl implements HousingBotService {
     public SendMessage onUpdateReceived(Update update) {
         if (isCommand(update)) {
             var chatUser = chatUserService.getOrSave(chatUserMapper.map(update.getMessage().getFrom()));
-            return commandHandler.handle(Query.ofCommand(update, chatUser));
-        }
-        if (isCallbackQuery(update)) {
+            return commandHandler.handle(Query.ofText(update, chatUser));
+        } else if (isCallbackQuery(update)) {
             var chatUser = chatUserService.getOrSave(chatUserMapper.map(update.getCallbackQuery().getFrom()));
-            return commandHandler.handle(Query.ofCallbackQuery(update, chatUser));
+            if (isCommand(update.getCallbackQuery().getData())) {
+                return commandHandler.handle(Query.ofCallbackQuery(update, chatUser));
+            } else {
+                return messageHandler.handle(Query.ofCallbackQuery(update, chatUser));
+            }
+        } else if (isBelongsToBot(update)) {
+            var chatUser = chatUserService.getOrSave(chatUserMapper.map(update.getMessage().getFrom()));
+            return messageHandler.handle(Query.ofText(update, chatUser));
         }
         return null;
+    }
+
+    private boolean isCommand(String data) {
+        return data.matches("^/\\D+$");
+    }
+
+    private boolean isBelongsToBot(Update update) {
+        return update.getMessage().getChat().isUserChat();
     }
 
     private boolean isCommand(Update update) {

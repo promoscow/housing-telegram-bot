@@ -11,5 +11,6 @@ public enum UpdateStep {
     HOUSING,
     SECTION,
     FLOOR,
-    FLAT
+    FLAT,
+    CONFIRMATION
 }

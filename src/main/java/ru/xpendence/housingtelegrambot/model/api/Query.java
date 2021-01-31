@@ -24,7 +24,7 @@ public class Query {
     private boolean privateChatWithQueryAuthor;
     private UpdateStep updateStep;
 
-    public static Query ofCommand(Update update, ChatUser chatUser) {
+    public static Query ofText(Update update, ChatUser chatUser) {
         var query = new Query();
         var message = update.getMessage();
         query.chatId = message.getChatId();

@@ -1,6 +1,5 @@
 package ru.xpendence.housingtelegrambot.model.domain;
 
-import com.google.common.collect.Lists;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,10 +38,4 @@ public class Flat extends AbstractEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "flat")
     private List<ChatUser> chatUsers;
-
-    public static Flat newOf(ChatUser chatUser) {
-        var flat = new Flat();
-        flat.chatUsers = Lists.newArrayList(chatUser);
-        return flat;
-    }
 }
