@@ -22,6 +22,9 @@ import java.util.List;
 @Entity
 @Table(name = "flats")
 @Where(clause = "active = 'ENABLED'")
+// TODO: 01.02.2021 серьёзная проблема, если в квартире уже кто-то живёт
+// TODO: 01.02.2021 обновлять квартиру и дописывать туда жильца
+// TODO: 01.02.2021 или лучше при старте создавать в базе квартиры и "подселять" туда жильцов
 public class Flat extends AbstractEntity {
 
     @Column(name = "housing")

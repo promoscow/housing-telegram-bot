@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.xpendence.housingtelegrambot.mapper.ChatUserMapper;
 import ru.xpendence.housingtelegrambot.model.api.Query;
 import ru.xpendence.housingtelegrambot.service.domain.ChatUserService;
-import ru.xpendence.housingtelegrambot.service.handler.CommandHandler;
-import ru.xpendence.housingtelegrambot.service.handler.MessageHandler;
+import ru.xpendence.housingtelegrambot.service.handler.impl.CommandHandler;
+import ru.xpendence.housingtelegrambot.service.handler.impl.MessageHandler;
 
 import java.util.Objects;
 

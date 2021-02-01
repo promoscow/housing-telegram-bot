@@ -1,4 +1,4 @@
-package ru.xpendence.housingtelegrambot.service.handler.executor.update_steps;
+package ru.xpendence.housingtelegrambot.service.handler.executor.update_steps.impl;
 
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
@@ -7,9 +7,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.xpendence.housingtelegrambot.model.api.Query;
-import ru.xpendence.housingtelegrambot.model.api.enums.UpdateStep;
+import ru.xpendence.housingtelegrambot.model.api.enums.InteractionStep;
 import ru.xpendence.housingtelegrambot.service.domain.ChatUserService;
 import ru.xpendence.housingtelegrambot.service.domain.FlatService;
+import ru.xpendence.housingtelegrambot.service.handler.executor.update_steps.Updater;
 import ru.xpendence.housingtelegrambot.util.MessageBuilder;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import java.util.List;
  * @author Вячеслав Чернышов
  * @since 31.01.2021
  */
-@Component("FLAT")
+@Component("UPDATE_FLAT")
 @RequiredArgsConstructor
 public class FlatUpdater implements Updater {
 
@@ -44,7 +45,7 @@ public class FlatUpdater implements Updater {
         var flat = flatService.getOrSave(query.getChatUser());
         flat.setFlat(Short.parseShort(query.getText()));
         flat = flatService.update(flat);
-        query.getChatUser().setUpdateStep(UpdateStep.CONFIRMATION);
+        query.getChatUser().setInteractionStep(InteractionStep.UPDATE_CONFIRMATION);
         chatUserService.update(query.getChatUser());
 
         var message = MessageBuilder.build(

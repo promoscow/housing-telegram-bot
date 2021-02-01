@@ -1,23 +1,24 @@
-package ru.xpendence.housingtelegrambot.service.handler.executor.update_steps;
+package ru.xpendence.housingtelegrambot.service.handler.executor.update_steps.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.xpendence.housingtelegrambot.model.api.Query;
-import ru.xpendence.housingtelegrambot.model.api.enums.UpdateStep;
+import ru.xpendence.housingtelegrambot.model.api.enums.InteractionStep;
 import ru.xpendence.housingtelegrambot.service.domain.ChatUserService;
 import ru.xpendence.housingtelegrambot.service.domain.FlatService;
+import ru.xpendence.housingtelegrambot.service.handler.executor.update_steps.Updater;
 import ru.xpendence.housingtelegrambot.util.MessageBuilder;
 
 /**
  * Описание класса: пару слов что это такое и для чего нужен.
  *
  * @author Вячеслав Чернышов
- * @since 30.01.2021
+ * @since 31.01.2021
  */
-@Component("HOUSING")
+@Component("UPDATE_SECTION")
 @RequiredArgsConstructor
-public class HousingUpdater implements Updater {
+public class SectionUpdater implements Updater {
 
     private final FlatService flatService;
     private final ChatUserService chatUserService;
@@ -25,14 +26,14 @@ public class HousingUpdater implements Updater {
     @Override
     public SendMessage update(Query query) {
         var flat = flatService.getOrSave(query.getChatUser());
-        flat.setHousing(Short.parseShort(query.getText()));
+        flat.setSection(Short.parseShort(query.getText()));
         flatService.update(flat);
-        query.getChatUser().setUpdateStep(UpdateStep.SECTION);
+        query.getChatUser().setInteractionStep(InteractionStep.UPDATE_FLOOR);
         chatUserService.update(query.getChatUser());
 
         return MessageBuilder.build(
                 query.getChatUser().getTelegramId().toString(),
-                "Отлично, корпус записан! Теперь давай введём секцию. Просто напиши мне сообщение с номером.",
+                "Мы записали секцию, поздравляю! Идём дальше: введи этаж.",
                 false
         );
     }

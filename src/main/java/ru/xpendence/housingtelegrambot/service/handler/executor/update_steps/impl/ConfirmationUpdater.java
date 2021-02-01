@@ -1,11 +1,12 @@
-package ru.xpendence.housingtelegrambot.service.handler.executor.update_steps;
+package ru.xpendence.housingtelegrambot.service.handler.executor.update_steps.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.xpendence.housingtelegrambot.model.api.Query;
-import ru.xpendence.housingtelegrambot.model.api.enums.UpdateStep;
+import ru.xpendence.housingtelegrambot.model.api.enums.InteractionStep;
 import ru.xpendence.housingtelegrambot.service.domain.ChatUserService;
+import ru.xpendence.housingtelegrambot.service.handler.executor.update_steps.Updater;
 import ru.xpendence.housingtelegrambot.util.MessageBuilder;
 
 /**
@@ -14,7 +15,7 @@ import ru.xpendence.housingtelegrambot.util.MessageBuilder;
  * @author Вячеслав Чернышов
  * @since 31.01.2021
  */
-@Component("CONFIRMATION")
+@Component("UPDATE_CONFIRMATION")
 @RequiredArgsConstructor
 public class ConfirmationUpdater implements Updater {
 
@@ -23,17 +24,19 @@ public class ConfirmationUpdater implements Updater {
 
     @Override
     public SendMessage update(Query query) {
+        var chatUser = query.getChatUser();
         if ("yes".equals(query.getText())) {
-            query.getChatUser().setUpdateStep(null);
-            chatUserService.update(query.getChatUser());
+            chatUser.setInteractionStep(null);
+            chatUser.setRegistered(true);
+            chatUserService.update(chatUser);
             return MessageBuilder.build(
-                    query.getChatUser().getTelegramId().toString(),
+                    chatUser.getTelegramId().toString(),
                     "Отлично, я всё сохранил. Если захочешь воспользоваться моими услугами, напиши мне /start.",
                     false
             );
         } else {
-            query.getChatUser().setUpdateStep(UpdateStep.START);
-            chatUserService.update(query.getChatUser());
+            chatUser.setInteractionStep(InteractionStep.UPDATE_START);
+            chatUserService.update(chatUser);
             return startUpdater.update(query);
         }
     }
