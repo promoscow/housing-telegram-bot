@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.xpendence.housingtelegrambot.model.domain.Flat;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,4 +21,20 @@ public interface FlatRepository extends JpaRepository<Flat, String> {
             nativeQuery = true
     )
     Optional<Flat> getForUser(@Param("chatUserId") String chatUserId);
+
+
+    @Query("select distinct f.housing from Flat f")
+    List<Short> getDistinctByHousing();
+
+    @Query("select distinct f.section from Flat f where f.housing = :housing")
+    List<Short> getDistinctBySection(@Param("housing") Short housing);
+
+    @Query("select distinct f.floor from Flat f where f.housing = :housing and f.section = :section")
+    List<Short> getDistinctByFloor(@Param("housing") Short housing, @Param("section") Short section);
+
+    @Query("select distinct f.flat from Flat f where f.housing = :housing and f.section = :section and f.floor = :floor")
+    List<Short> getDistinctByFlat(@Param("housing") Short housing, @Param("section") Short section, @Param("floor") Short floor);
+
+    @Query("select f from Flat f where f.housing = :housing and f.flat = :flat")
+    Flat getByFlat(@Param("housing") Short housing, @Param("flat") Short flat);
 }

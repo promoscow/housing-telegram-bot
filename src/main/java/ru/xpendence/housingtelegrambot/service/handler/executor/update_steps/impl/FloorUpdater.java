@@ -3,12 +3,16 @@ package ru.xpendence.housingtelegrambot.service.handler.executor.update_steps.im
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import ru.xpendence.housingtelegrambot.cache.CacheManager;
 import ru.xpendence.housingtelegrambot.model.api.Query;
 import ru.xpendence.housingtelegrambot.model.api.enums.InteractionStep;
 import ru.xpendence.housingtelegrambot.service.domain.ChatUserService;
 import ru.xpendence.housingtelegrambot.service.domain.FlatService;
+import ru.xpendence.housingtelegrambot.service.handler.executor.builders.AbstractButtonsBuilder;
 import ru.xpendence.housingtelegrambot.service.handler.executor.update_steps.Updater;
 import ru.xpendence.housingtelegrambot.util.MessageBuilder;
+
+import java.util.stream.Collectors;
 
 /**
  * Описание класса: пару слов что это такое и для чего нужен.
@@ -18,23 +22,35 @@ import ru.xpendence.housingtelegrambot.util.MessageBuilder;
  */
 @Component("UPDATE_FLOOR")
 @RequiredArgsConstructor
-public class FloorUpdater implements Updater {
+public class FloorUpdater extends AbstractButtonsBuilder implements Updater {
 
     private final FlatService flatService;
     private final ChatUserService chatUserService;
+    private final CacheManager cacheManager;
 
     @Override
     public SendMessage update(Query query) {
-        var flat = flatService.getOrSave(query.getChatUser());
-        flat.setFloor(Short.parseShort(query.getText()));
-        flatService.update(flat);
-        query.getChatUser().setInteractionStep(InteractionStep.UPDATE_FLAT);
-        chatUserService.update(query.getChatUser());
+        var chatUser = query.getChatUser();
 
-        return MessageBuilder.build(
-                query.getChatUser().getTelegramId().toString(),
-                "Остался последний шаг - ввести квартиру.",
+        var cache = cacheManager.get(chatUser.getId());
+        var floor = Short.parseShort(query.getText());
+        cache.setFloor(floor);
+        cacheManager.saveOrUpdate(cache);
+
+        chatUser.setInteractionStep(InteractionStep.UPDATE_FLAT);
+        chatUserService.update(chatUser);
+
+        var message = MessageBuilder.build(
+                chatUser.getTelegramId().toString(),
+                "Остался последний шаг - выбери квартиру.",
                 false
         );
+        var buttonValues = flatService.getAvailableFlats(cache.getHousing(), cache.getSection(), floor)
+                .stream()
+                .sorted()
+                .map(Object::toString)
+                .collect(Collectors.toList());
+        message.setReplyMarkup(composeButtons(buttonValues));
+        return message;
     }
 }

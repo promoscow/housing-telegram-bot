@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.xpendence.housingtelegrambot.model.api.Query;
-import ru.xpendence.housingtelegrambot.service.handler.executor.builders.AbstractHousingButtonsBuilder;
+import ru.xpendence.housingtelegrambot.service.handler.executor.builders.AbstractButtonsBuilder;
 import ru.xpendence.housingtelegrambot.service.handler.executor.info_steps.Informer;
 import ru.xpendence.housingtelegrambot.util.MessageBuilder;
 
@@ -16,7 +16,7 @@ import ru.xpendence.housingtelegrambot.util.MessageBuilder;
  */
 @Component("INFO_START")
 @RequiredArgsConstructor
-public class StartInformer extends AbstractHousingButtonsBuilder implements Informer {
+public class StartInformer extends AbstractButtonsBuilder implements Informer {
 
     @Override
     public SendMessage inform(Query query) {
@@ -25,7 +25,7 @@ public class StartInformer extends AbstractHousingButtonsBuilder implements Info
                 "Выберите корпус",
                 true
                 );
-        message.setReplyMarkup(composeButtons());
+//        message.setReplyMarkup(composeButtons());
         return message;
     }
 }

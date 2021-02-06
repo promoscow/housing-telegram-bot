@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import ru.xpendence.housingtelegrambot.cache.CacheManager;
 import ru.xpendence.housingtelegrambot.model.api.Query;
 import ru.xpendence.housingtelegrambot.model.api.enums.InteractionStep;
 import ru.xpendence.housingtelegrambot.service.domain.ChatUserService;
-import ru.xpendence.housingtelegrambot.service.domain.FlatService;
 import ru.xpendence.housingtelegrambot.service.handler.executor.update_steps.Updater;
 import ru.xpendence.housingtelegrambot.util.MessageBuilder;
 
@@ -37,20 +37,24 @@ public class FlatUpdater implements Updater {
             Всё верно?
             """;
 
-    private final FlatService flatService;
+    private final CacheManager cacheManager;
     private final ChatUserService chatUserService;
 
     @Override
     public SendMessage update(Query query) {
-        var flat = flatService.getOrSave(query.getChatUser());
-        flat.setFlat(Short.parseShort(query.getText()));
-        flat = flatService.update(flat);
-        query.getChatUser().setInteractionStep(InteractionStep.UPDATE_CONFIRMATION);
-        chatUserService.update(query.getChatUser());
+        var chatUser = query.getChatUser();
+
+        var cache = cacheManager.get(chatUser.getId());
+        var flat = Short.parseShort(query.getText());
+        cache.setFlat(flat);
+        cacheManager.saveOrUpdate(cache);
+
+        chatUser.setInteractionStep(InteractionStep.UPDATE_CONFIRMATION);
+        chatUserService.update(chatUser);
 
         var message = MessageBuilder.build(
                 query.getChatUser().getTelegramId().toString(),
-                String.format(CONGRATS_TEXT, flat.getHousing(), flat.getSection(), flat.getFloor(), flat.getFlat()),
+                String.format(CONGRATS_TEXT, cache.getHousing(), cache.getSection(), cache.getFloor(), flat),
                 true
         );
 
