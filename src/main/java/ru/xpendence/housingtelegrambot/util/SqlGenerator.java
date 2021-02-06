@@ -1,5 +1,9 @@
 package ru.xpendence.housingtelegrambot.util;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -22,7 +26,17 @@ public class SqlGenerator {
         builder.append(HEADER);
         composeQuery(section7, builder, 7);
         composeQuery(section8, builder, 8);
-        System.out.println(builder.toString().trim());
+        builder.setCharAt(builder.length() - 2, ';');
+        var query = builder.toString().trim();
+
+        try (var writer = new BufferedWriter(
+                new FileWriter
+                        (new File("").getAbsolutePath() + "\\src\\main\\resources\\db\\migration\\V001.04__populate_flats.sql")
+        )) {
+            writer.write(query);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void composeQuery(Short[][] section, StringBuilder builder, int sectionNumber) {
