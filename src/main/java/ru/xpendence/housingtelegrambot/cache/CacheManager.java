@@ -1,7 +1,7 @@
 package ru.xpendence.housingtelegrambot.cache;
 
 import org.springframework.stereotype.Component;
-import ru.xpendence.housingtelegrambot.model.cache.UpdateCache;
+import ru.xpendence.housingtelegrambot.model.cache.UserChooseCache;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,13 +15,13 @@ import java.util.Map;
 @Component
 public class CacheManager {
 
-    private Map<String, UpdateCache> cacheMap = new HashMap<>();
+    private Map<String, UserChooseCache> cacheMap = new HashMap<>();
 
-    public void saveOrUpdate(UpdateCache cache) {
+    public void saveOrUpdate(UserChooseCache cache) {
         cacheMap.put(cache.getChatUserId(), cache);
     }
 
-    public UpdateCache get(String chatUserId) {
+    public UserChooseCache get(String chatUserId) {
         return cacheMap.get(chatUserId);
     }
 }

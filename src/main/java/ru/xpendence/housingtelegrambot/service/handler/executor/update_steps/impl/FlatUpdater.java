@@ -32,7 +32,7 @@ public class FlatUpdater implements Updater {
             Корпус: %d
             Секция: %d
             Этаж: %d
-            Квартира: %d.
+            Квартира: %d
             
             Всё верно?
             """;

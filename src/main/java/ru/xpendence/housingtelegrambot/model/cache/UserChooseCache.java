@@ -11,7 +11,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class UpdateCache {
+public class UserChooseCache {
 
     private String chatUserId;
     private Short housing;
@@ -19,7 +19,7 @@ public class UpdateCache {
     private Short floor;
     private Short flat;
 
-    public UpdateCache(String chatUserId) {
+    public UserChooseCache(String chatUserId) {
         this.chatUserId = chatUserId;
     }
 }

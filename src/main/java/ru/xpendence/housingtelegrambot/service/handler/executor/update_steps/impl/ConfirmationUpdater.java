@@ -39,7 +39,7 @@ public class ConfirmationUpdater implements Updater {
             chatUserService.update(chatUser);
             return MessageBuilder.build(
                     chatUser.getTelegramId().toString(),
-                    "Отлично, я всё сохранил. Если захочешь воспользоваться моими услугами, напиши мне /start.",
+                    "Отлично, я всё записал \uD83D\uDCDD✅ Если захочешь воспользоваться моими услугами, напиши мне /start.",
                     false
             );
         } else {

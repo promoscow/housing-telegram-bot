@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.xpendence.housingtelegrambot.cache.CacheManager;
 import ru.xpendence.housingtelegrambot.model.api.Query;
 import ru.xpendence.housingtelegrambot.model.api.enums.InteractionStep;
-import ru.xpendence.housingtelegrambot.model.cache.UpdateCache;
+import ru.xpendence.housingtelegrambot.model.cache.UserChooseCache;
 import ru.xpendence.housingtelegrambot.service.domain.ChatUserService;
 import ru.xpendence.housingtelegrambot.service.domain.FlatService;
 import ru.xpendence.housingtelegrambot.service.handler.executor.builders.AbstractButtonsBuilder;
@@ -34,7 +34,7 @@ public class StartUpdater extends AbstractButtonsBuilder implements Updater {
     @Override
     public SendMessage update(Query query) {
         var chatUser = query.getChatUser();
-        cacheManager.saveOrUpdate(new UpdateCache(chatUser.getId()));
+        cacheManager.saveOrUpdate(new UserChooseCache(chatUser.getId()));
         chatUser.setInteractionStep(InteractionStep.UPDATE_HOUSING);
         chatUserService.update(chatUser);
 

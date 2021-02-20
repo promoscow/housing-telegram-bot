@@ -28,14 +28,14 @@ public class StartCommandExecutor implements CommandExecutor {
     private final ChatUserService chatUserService;
 
     private final static String START_TEXT_MESSAGE = """
-        Привет! Я - СкандиБот. Храню информацию по всем жильцам нашего ЖК.
+        Привет! Я - СкандиБот 🤖 Храню информацию по всем жильцам нашего ЖК.
         
         Для начала, давай добавим информацию о тебе. Как минимум, мне нужно знать корпус, секцию и этаж.
         После добавления этой информации ты сможешь смотреть информацию по другим жильцам.
         """;
 
     private final static String REGISTERED_TEXT_MESSAGE = """
-            С возвращением!
+            С возвращением 👾
             
             Ты можешь обновить информацию о себе, добавить автомобиль или запросить информацию о других жильцах.
             """;
@@ -91,28 +91,28 @@ public class StartCommandExecutor implements CommandExecutor {
 
     private InlineKeyboardButton createAddButton() {
         var button = new InlineKeyboardButton();
-        button.setText("Добавить инфо о себе");
+        button.setText("\uD83D\uDCDD Добавить инфо о себе");
         button.setCallbackData("/update");
         return button;
     }
 
     private InlineKeyboardButton createRefreshButton() {
         var button = new InlineKeyboardButton();
-        button.setText("Обновить");
+        button.setText("\uD83D\uDCDD Обновить");
         button.setCallbackData("/update");
         return button;
     }
 
     private InlineKeyboardButton createAutoButton() {
         var button = new InlineKeyboardButton();
-        button.setText("Добавить авто");
+        button.setText("\uD83D\uDE97 Добавить авто");
         button.setCallbackData("/auto");
         return button;
     }
 
     private InlineKeyboardButton createInfoButton() {
         var button = new InlineKeyboardButton();
-        button.setText("Инфо");
+        button.setText("\uD83C\uDFE0 Инфо");
         button.setCallbackData("/info");
         return button;
     }

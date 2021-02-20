@@ -31,14 +31,15 @@ public class FloorUpdater extends AbstractButtonsBuilder implements Updater {
     @Override
     public SendMessage update(Query query) {
         var chatUser = query.getChatUser();
+        chatUser.setInteractionStep(InteractionStep.UPDATE_FLAT);
+        chatUserService.update(chatUser);
 
         var cache = cacheManager.get(chatUser.getId());
+
         var floor = Short.parseShort(query.getText());
         cache.setFloor(floor);
         cacheManager.saveOrUpdate(cache);
 
-        chatUser.setInteractionStep(InteractionStep.UPDATE_FLAT);
-        chatUserService.update(chatUser);
 
         var message = MessageBuilder.build(
                 chatUser.getTelegramId().toString(),

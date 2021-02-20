@@ -31,14 +31,13 @@ public class SectionUpdater extends AbstractButtonsBuilder implements Updater {
     @Override
     public SendMessage update(Query query) {
         var chatUser = query.getChatUser();
-
-        var cache = cacheManager.get(chatUser.getId());
-        var section = Short.parseShort(query.getText());
-        cache.setSection(section);
-        cacheManager.saveOrUpdate(cache);
-
         chatUser.setInteractionStep(InteractionStep.UPDATE_FLOOR);
         chatUserService.update(chatUser);
+
+        var section = Short.parseShort(query.getText());
+        var cache = cacheManager.get(chatUser.getId());
+        cache.setSection(section);
+        cacheManager.saveOrUpdate(cache);
 
         var message = MessageBuilder.build(
                 chatUser.getTelegramId().toString(),

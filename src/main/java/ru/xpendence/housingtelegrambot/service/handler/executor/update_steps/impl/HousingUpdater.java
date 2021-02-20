@@ -31,14 +31,14 @@ public class HousingUpdater extends AbstractButtonsBuilder implements Updater {
     @Override
     public SendMessage update(Query query) {
         var chatUser = query.getChatUser();
-
-        var cache = cacheManager.get(chatUser.getId());
-        var housing = Short.parseShort(query.getText());
-        cache.setHousing(housing);
-        cacheManager.saveOrUpdate(cache);
-
         chatUser.setInteractionStep(InteractionStep.UPDATE_SECTION);
         chatUserService.update(chatUser);
+
+        var housing = Short.parseShort(query.getText());
+
+        var cache = cacheManager.get(chatUser.getId());
+        cache.setHousing(housing);
+        cacheManager.saveOrUpdate(cache);
 
         var message = MessageBuilder.build(
                 chatUser.getTelegramId().toString(),
