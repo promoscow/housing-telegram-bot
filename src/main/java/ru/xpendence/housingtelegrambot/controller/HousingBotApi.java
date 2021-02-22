@@ -26,7 +26,6 @@ public class HousingBotApi extends TelegramLongPollingBot {
         try {
             execute(housingBotService.onUpdateReceived(update));
         } catch (TelegramApiException e) {
-            // TODO: 30.01.2021
             e.printStackTrace();
         }
     }

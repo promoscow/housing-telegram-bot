@@ -72,7 +72,7 @@ public class FlatInformer implements Informer {
                 flat.getSection(),
                 flat.getFloor(),
                 flat.getFlat(),
-                usersAsString.isBlank() ? "В этой квартире никто не живёт \uD83D\uDE10" : "В этой квартире живут следующие telegram-юзеры:\n\n" + usersAsString
+                usersAsString.isBlank() ? "В этой квартире никто не живёт \uD83D\uDE10" : "Эта квартира принадлежит следующим собственникам:\n\n" + usersAsString
         );
     }
 }

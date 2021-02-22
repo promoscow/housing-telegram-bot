@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.xpendence.housingtelegrambot.log.MessageLogger;
 import ru.xpendence.housingtelegrambot.mapper.ChatUserMapper;
 import ru.xpendence.housingtelegrambot.model.api.Query;
 import ru.xpendence.housingtelegrambot.service.domain.ChatUserService;
@@ -28,6 +29,7 @@ public class HousingBotServiceImpl implements HousingBotService {
     private final ChatUserService chatUserService;
 
     @Override
+    @MessageLogger
     public SendMessage onUpdateReceived(Update update) {
         if (isCommand(update)) {
             var chatUser = chatUserService.getOrSave(chatUserMapper.map(update.getMessage().getFrom()));
