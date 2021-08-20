@@ -2,7 +2,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/scandi_bot?currentSchema\=public
-    username: admin
+    username: scandi_bot_admin
     password: q1w2e3r4!@
     continue-on-error: true
     hikari:
